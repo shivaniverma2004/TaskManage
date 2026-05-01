@@ -16,19 +16,22 @@ public class DataInitializer implements CommandLineRunner {
     private final String adminName;
     private final String adminEmail;
     private final String adminPassword;
+    private final boolean resetAdminPasswordOnStartup;
 
     public DataInitializer(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         @Value("${app.admin.name:}") String adminName,
         @Value("${app.admin.email:}") String adminEmail,
-        @Value("${app.admin.password:}") String adminPassword
+        @Value("${app.admin.password:}") String adminPassword,
+        @Value("${app.admin.reset-password-on-startup:false}") boolean resetAdminPasswordOnStartup
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.adminName = adminName;
         this.adminEmail = adminEmail;
         this.adminPassword = adminPassword;
+        this.resetAdminPasswordOnStartup = resetAdminPasswordOnStartup;
     }
 
     @Override
@@ -37,8 +40,20 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
         userRepository.findByEmailIgnoreCase(adminEmail).ifPresentOrElse(existingAdmin -> {
+            boolean changed = false;
             if (existingAdmin.getRole() != Role.ADMIN) {
                 existingAdmin.setRole(Role.ADMIN);
+                changed = true;
+            }
+            if (resetAdminPasswordOnStartup) {
+                existingAdmin.setPasswordHash(passwordEncoder.encode(adminPassword));
+                changed = true;
+            }
+            if (adminName != null && !adminName.isBlank() && !adminName.trim().equals(existingAdmin.getName())) {
+                existingAdmin.setName(adminName.trim());
+                changed = true;
+            }
+            if (changed) {
                 userRepository.save(existingAdmin);
             }
         }, () -> {
