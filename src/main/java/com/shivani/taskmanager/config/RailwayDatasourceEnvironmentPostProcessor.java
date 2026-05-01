@@ -36,7 +36,8 @@ public class RailwayDatasourceEnvironmentPostProcessor implements EnvironmentPos
 
         String databaseUrl = environment.getProperty("DATABASE_URL");
         if (StringUtils.hasText(databaseUrl)) {
-            ParsedJdbc parsed = parseDatabaseUrl(databaseUrl.trim());
+            String resolvedDbUrl = databaseUrl.trim();
+            ParsedJdbc parsed = parseDatabaseUrl(resolvedDbUrl);
             props.put("spring.datasource.url", parsed.jdbcUrl());
             props.put("spring.datasource.username", parsed.username());
             props.put("spring.datasource.password", parsed.password());
@@ -58,7 +59,8 @@ public class RailwayDatasourceEnvironmentPostProcessor implements EnvironmentPos
             String jdbcUrl = "jdbc:postgresql://" + pgHost + ":" + port + "/" + database;
             String sslMode = environment.getProperty("PGSSLMODE");
             if (StringUtils.hasText(sslMode)) {
-                jdbcUrl += "?sslmode=" + urlEncodeQueryValue(sslMode.trim());
+                String ssl = sslMode.trim();
+                jdbcUrl += "?sslmode=" + urlEncodeQueryValue(ssl);
             }
             props.put("spring.datasource.url", jdbcUrl);
             props.put(

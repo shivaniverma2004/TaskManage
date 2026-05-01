@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public class TaskDtos {
+    @SuppressWarnings("unused")
     public record TaskRequest(
         @NotBlank @Size(max = 160) String title,
         @Size(max = 800) String description,
@@ -17,6 +18,7 @@ public class TaskDtos {
     ) {
     }
 
+    @SuppressWarnings("unused")
     public record StatusRequest(@NotNull TaskStatus status) {
     }
 }

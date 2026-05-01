@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class AuthDtos {
+    @SuppressWarnings("unused")
     public record SignupRequest(
         @NotBlank @Size(max = 80) String name,
         @Email @NotBlank String email,
@@ -14,15 +15,18 @@ public class AuthDtos {
     ) {
     }
 
+    @SuppressWarnings("unused")
     public record LoginRequest(
         @Email @NotBlank String email,
         @NotBlank String password
     ) {
     }
 
+    @SuppressWarnings("unused")
     public record AuthResponse(String token, UserResponse user) {
     }
 
+    @SuppressWarnings("unused")
     public record UserResponse(Long id, String name, String email, Role role) {
     }
 }

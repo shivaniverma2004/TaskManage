@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Set;
 
 public class ProjectDtos {
+    @SuppressWarnings("unused")
     public record ProjectRequest(
         @NotBlank @Size(max = 120) String name,
         @Size(max = 600) String description,
@@ -14,6 +15,7 @@ public class ProjectDtos {
     ) {
     }
 
+    @SuppressWarnings("unused")
     public record MemberRequest(@NotNull Long userId) {
     }
 }
