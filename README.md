@@ -153,7 +153,6 @@ Use the PostgreSQL connection details shown by Railway for `HOST`, `PORT`, `DATA
 
 ## Assignment Submission Checklist
 
-- Live Application URL: your Railway public URL
-- GitHub Repo: your GitHub repository URL
+- Live Application URL: https://www.generous-simplicity-production-ff0e.up.railway.app/
 - README: this file
 - Demo Video: 2-5 minutes showing login, member signup, team creation, project creation, task assignment, status updates, delete actions, and dashboard progress
