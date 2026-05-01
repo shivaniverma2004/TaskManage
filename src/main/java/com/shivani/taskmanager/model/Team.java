@@ -38,7 +38,7 @@ public class Team {
     @ManyToOne(fetch = FetchType.EAGER)
     private User leader;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "team_members",
         joinColumns = @JoinColumn(name = "team_id"),

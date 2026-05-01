@@ -42,7 +42,7 @@ public class Project {
     @ManyToOne(fetch = FetchType.EAGER)
     private Team team;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "project_members",
         joinColumns = @JoinColumn(name = "project_id"),

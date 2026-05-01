@@ -183,7 +183,7 @@ function renderDashboardTasks() {
 }
 
 function renderUsersAndProjects() {
-  const members = state.users.filter((user) => user.role === "MEMBER");
+  const members = state.users;
   $("#projectMembers").innerHTML = members.map((user) => `<option value="${user.id}">${escapeHtml(user.name)} (${escapeHtml(user.email)})</option>`).join("");
   $("#projectTeam").innerHTML = `<option value="">No team</option>` + state.teams.map((team) => `<option value="${team.id}">${escapeHtml(team.name)}</option>`).join("");
   $("#teamLeader").innerHTML = `<option value="">No leader</option>` + members.map((user) => `<option value="${user.id}">${escapeHtml(user.name)}</option>`).join("");
@@ -211,7 +211,10 @@ function renderTeam() {
         <strong>${escapeHtml(user.name)}</strong>
         <span>${escapeHtml(user.email)}</span>
       </div>
-      <span class="badge">${user.role}</span>
+      <span class="actions">
+        <span class="badge">${user.role}</span>
+        ${isAdmin() && state.user?.id !== user.id ? `<button class="danger small" data-delete-user="${user.id}" type="button">Delete</button>` : ""}
+      </span>
     </article>
   `).join("") : emptyState("No users yet", "Members can signup from the auth screen.");
 }
@@ -404,7 +407,7 @@ function closeDialogs() {
 
 function updateTaskAssigneeOptions(projectId = $("#taskProject")?.value, selectedId = $("#taskAssignee")?.value) {
   const project = state.projects.find((item) => String(item.id) === String(projectId));
-  const members = project?.members?.length ? project.members : state.users.filter((user) => user.role === "MEMBER");
+  const members = project?.members?.length ? project.members : state.users;
   $("#taskAssignee").innerHTML = `<option value="">Unassigned</option>` + members.map((user) => `<option value="${user.id}">${escapeHtml(user.name)}</option>`).join("");
   $("#taskAssignee").value = selectedId && members.some((user) => String(user.id) === String(selectedId)) ? String(selectedId) : "";
 }
@@ -599,6 +602,17 @@ document.addEventListener("click", async (event) => {
     await api(`/api/teams/${deleteTeam.dataset.deleteTeam}`, { method: "DELETE" });
     await refresh();
     showToast("Team deleted.");
+  }
+
+  const deleteUser = event.target.closest("[data-delete-user]");
+  if (deleteUser && confirm("Delete this user? They will be removed from teams/projects and their tasks will be unassigned.")) {
+    try {
+      await api(`/api/users/${deleteUser.dataset.deleteUser}`, { method: "DELETE" });
+      await refresh();
+      showToast("User deleted.");
+    } catch (error) {
+      showToast("Could not delete user.");
+    }
   }
 });
 

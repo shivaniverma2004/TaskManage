@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SessionTokenRepository extends JpaRepository<SessionToken, String> {
     Optional<SessionToken> findByTokenAndExpiresAtAfter(String token, Instant now);
     void deleteByExpiresAtBefore(Instant now);
+    void deleteByUserId(Long userId);
 }
