@@ -10,6 +10,12 @@ WorkBoard is a role-based project and task management web app built for the assi
 - REST APIs with SQL database relationships
 - Railway-ready deployment
 
+#Demo Credentials for admin
+email: admin23@task.com
+password: admin@123
+
+Members can signup. 
+
 ## Tech Stack
 
 - Java 17
